@@ -1,21 +1,25 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 import * as schema from "./schema";
 
 const connectionString = process.env.DATABASE_URL!;
 
-console.log("[DB] Configuring postgres client...");
+console.log("[DB] Using node-postgres (pg)");
 
-// Use SSL for Supabase connection pooler
-const client = postgres(connectionString, {
-  prepare: false,
+const pool = new Pool({
+  connectionString,
   ssl: { rejectUnauthorized: false },
   max: 10,
-  connect_timeout: 30,
+  connectionTimeoutMillis: 30000,
+  idleTimeoutMillis: 30000,
 });
 
-console.log("[DB] Postgres client created");
+pool.on('error', (err) => {
+  console.error('[DB] Pool error:', err);
+});
 
-export const db = drizzle(client, { schema });
+console.log("[DB] Pool created");
+
+export const db = drizzle(pool, { schema });
 
 console.log("[DB] Drizzle initialized");
