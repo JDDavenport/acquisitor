@@ -6,9 +6,10 @@ const connectionString = process.env.DATABASE_URL!;
 
 console.log("[DB] Configuring postgres client...");
 
+// Use SSL for Supabase connection pooler
 const client = postgres(connectionString, {
   prepare: false,
-  ssl: false,
+  ssl: { rejectUnauthorized: false },
   max: 10,
   connect_timeout: 30,
 });
