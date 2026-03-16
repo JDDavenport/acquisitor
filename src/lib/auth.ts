@@ -4,10 +4,6 @@ import { db } from "@/lib/db";
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-console.log("[Auth] Initializing Better Auth...");
-console.log("[Auth] appUrl:", appUrl);
-console.log("[Auth] DATABASE_URL exists:", !!process.env.DATABASE_URL);
-
 // Only enable social providers if credentials are available
 const socialProviders: any = {};
 
@@ -26,7 +22,7 @@ if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
 }
 
 export const auth = betterAuth({
-  secret: process.env.BETTER_AUTH_SECRET || "your-secret-key-here-change-in-production",
+  secret: process.env.BETTER_AUTH_SECRET || "fallback-secret-for-build",
   baseURL: appUrl,
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -37,15 +33,13 @@ export const auth = betterAuth({
     autoSignIn: true,
   },
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days
-    updateAge: 60 * 60 * 24, // 1 day
+    expiresIn: 60 * 60 * 24 * 7,
+    updateAge: 60 * 60 * 24,
   },
   advanced: {
     cookiePrefix: "acquisitor",
   },
 });
-
-console.log("[Auth] Better Auth initialized");
 
 export type AuthSession = typeof auth.$Infer.Session;
 export { appUrl };
