@@ -1,28 +1,30 @@
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { toNextJsHandler } from "better-auth/next-js";
 
-const handler = toNextJsHandler(auth);
-
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
-    return await handler.GET(req);
-  } catch (error) {
+    const response = await auth.handler(req);
+    return response;
+  } catch (error: any) {
     console.error("Auth GET error:", error);
-    return new Response(JSON.stringify({ error: "Auth error", details: String(error) }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+    return NextResponse.json({ 
+      error: "Auth error", 
+      message: error.message,
+      stack: error.stack 
+    }, { status: 500 });
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    return await handler.POST(req);
-  } catch (error) {
+    const response = await auth.handler(req);
+    return response;
+  } catch (error: any) {
     console.error("Auth POST error:", error);
-    return new Response(JSON.stringify({ error: "Auth error", details: String(error) }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+    return NextResponse.json({ 
+      error: "Auth error", 
+      message: error.message,
+      stack: error.stack 
+    }, { status: 500 });
   }
 }
