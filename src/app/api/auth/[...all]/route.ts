@@ -1,26 +1,51 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+
+let auth: any;
+let authError: any;
+
+try {
+  const authModule = require("@/lib/auth");
+  auth = authModule.auth;
+} catch (e: any) {
+  authError = e;
+}
 
 export async function GET(req: NextRequest) {
-  console.log("[Auth] GET received");
+  if (authError) {
+    return NextResponse.json({ 
+      error: "Auth initialization failed", 
+      message: authError?.message || String(authError),
+      stack: authError?.stack
+    }, { status: 500 });
+  }
+  
   try {
-    const response = await auth.handler(req);
-    console.log("[Auth] GET handler success");
-    return response;
+    return await auth.handler(req);
   } catch (error: any) {
-    console.error("[Auth] GET error:", error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Auth GET error", 
+      message: error?.message || String(error),
+      stack: error?.stack
+    }, { status: 500 });
   }
 }
 
 export async function POST(req: NextRequest) {
-  console.log("[Auth] POST received");
+  if (authError) {
+    return NextResponse.json({ 
+      error: "Auth initialization failed", 
+      message: authError?.message || String(authError),
+      stack: authError?.stack
+    }, { status: 500 });
+  }
+  
   try {
-    const response = await auth.handler(req);
-    console.log("[Auth] POST handler success");
-    return response;
+    return await auth.handler(req);
   } catch (error: any) {
-    console.error("[Auth] POST error:", error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Auth POST error", 
+      message: error?.message || String(error),
+      stack: error?.stack
+    }, { status: 500 });
   }
 }
