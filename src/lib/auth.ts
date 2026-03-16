@@ -21,8 +21,12 @@ if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
   };
 }
 
+console.log("[BetterAuth] Initializing with baseURL:", appUrl);
+console.log("[BetterAuth] Database URL exists:", !!process.env.DATABASE_URL);
+console.log("[BetterAuth] Secret exists:", !!process.env.BETTER_AUTH_SECRET);
+
 export const auth = betterAuth({
-  secret: process.env.BETTER_AUTH_SECRET || "fallback-secret-for-build",
+  secret: process.env.BETTER_AUTH_SECRET || "fallback-secret-for-build-only",
   baseURL: appUrl,
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -40,6 +44,8 @@ export const auth = betterAuth({
     cookiePrefix: "acquisitor",
   },
 });
+
+console.log("[BetterAuth] Initialized successfully");
 
 export type AuthSession = typeof auth.$Infer.Session;
 export { appUrl };
