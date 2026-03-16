@@ -10,37 +10,26 @@ try {
   initError = e;
 }
 
-export async function GET(req: NextRequest) {
-  if (initError) {
-    return NextResponse.json({ 
-      error: "Auth init failed", 
-      message: initError?.message,
-      stack: initError?.stack?.split('\n').slice(0, 3)
-    }, { status: 500 });
-  }
-  
-  try {
-    return await auth.handler(req);
-  } catch (error: any) {
-    return NextResponse.json({ 
-      error: "Auth handler error", 
-      message: error?.message,
-      stack: error?.stack?.split('\n').slice(0, 3)
-    }, { status: 500 });
-  }
-}
-
 export async function POST(req: NextRequest) {
   if (initError) {
     return NextResponse.json({ 
       error: "Auth init failed", 
-      message: initError?.message,
-      stack: initError?.stack?.split('\n').slice(0, 3)
+      message: initError?.message
     }, { status: 500 });
   }
   
   try {
-    return await auth.handler(req);
+    console.log("[Auth] Calling handler...");
+    const response = await auth.handler(req);
+    console.log("[Auth] Handler returned:", response);
+    
+    if (!response) {
+      return NextResponse.json({ 
+        error: "Handler returned empty response"
+      }, { status: 500 });
+    }
+    
+    return response;
   } catch (error: any) {
     return NextResponse.json({ 
       error: "Auth handler error", 
