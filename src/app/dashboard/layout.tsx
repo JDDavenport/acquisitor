@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import DashboardLayout from "./layout-client";
+import DashboardLayoutClient from "./layout-client";
 
 export default async function Layout({
   children,
@@ -17,8 +17,8 @@ export default async function Layout({
   }
 
   return (
-    <DashboardLayout user={session.user}>
+    <DashboardLayoutClient user={session.user}>
       {children}
-    </DashboardLayout>
+    </DashboardLayoutClient>
   );
 }

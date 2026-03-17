@@ -101,14 +101,16 @@ export function Hero() {
             </Button>
           </Link>
           
-          <Button 
-            size="lg" 
-            variant="outline" 
-            className="w-full sm:w-auto border-navy-400 text-white hover:bg-navy-800/50 hover:text-white bg-transparent"
-          >
-            <Play className="w-5 h-5 mr-2" />
-            Watch Demo
-          </Button>
+          <Link href="/demo">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="w-full sm:w-auto border-navy-400 text-white hover:bg-navy-800/50 hover:text-white bg-transparent"
+            >
+              <Play className="w-5 h-5 mr-2" />
+              Watch Demo
+            </Button>
+          </Link>
         </motion.div>
 
         <motion.div

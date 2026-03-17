@@ -1,6 +1,3 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import {
   Users,
   Mail,
@@ -54,11 +51,8 @@ function getScoreColor(score: number) {
   return "text-red-400 bg-red-500/10";
 }
 
-export default async function DashboardPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/login");
-
-  const displayName = session.user.name?.split(" ")[0] || "there";
+export default function DemoDashboardPage() {
+  const displayName = "Demo User";
 
   return (
     <div className="space-y-6 animate-slide-up">
@@ -66,11 +60,11 @@ export default async function DashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white">
-            Welcome back, {displayName} 👋
+            Welcome to the Demo 👋
           </h1>
           <p className="text-navy-300 mt-1">Here&apos;s what&apos;s happening with your acquisitions today.</p>
         </div>
-        <Link href="/dashboard/leads">
+        <Link href="/demo/leads">
           <Button className="bg-gold-500 hover:bg-gold-400 text-navy-950 font-semibold">
             <Plus className="w-4 h-4 mr-2" />
             Add Lead
@@ -139,7 +133,7 @@ export default async function DashboardPage() {
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg font-semibold text-white">Top Leads</CardTitle>
-                <Link href="/dashboard/leads">
+                <Link href="/demo/leads">
                   <Button variant="ghost" size="sm" className="text-navy-300 hover:text-white hover:bg-navy-700">
                     See All
                   </Button>
@@ -168,19 +162,19 @@ export default async function DashboardPage() {
               <CardTitle className="text-lg font-semibold text-white">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Link href="/dashboard/leads">
+              <Link href="/demo/leads">
                 <Button variant="outline" className="w-full justify-start border-navy-700 text-navy-200 hover:bg-navy-700 hover:text-white bg-transparent">
                   <Users className="w-4 h-4 mr-3 text-blue-400" />
                   Browse Leads
                 </Button>
               </Link>
-              <Link href="/dashboard/pipeline">
+              <Link href="/demo/pipeline">
                 <Button variant="outline" className="w-full justify-start border-navy-700 text-navy-200 hover:bg-navy-700 hover:text-white bg-transparent">
                   <Kanban className="w-4 h-4 mr-3 text-gold-400" />
                   View Pipeline
                 </Button>
               </Link>
-              <Link href="/dashboard/settings">
+              <Link href="/demo/settings">
                 <Button variant="outline" className="w-full justify-start border-navy-700 text-navy-200 hover:bg-navy-700 hover:text-white bg-transparent">
                   <Settings className="w-4 h-4 mr-3 text-navy-400" />
                   Settings

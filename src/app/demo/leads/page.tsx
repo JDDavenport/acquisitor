@@ -54,7 +54,7 @@ function getScoreStyle(score: number) {
   return "text-red-400 bg-red-500/10";
 }
 
-export default function LeadsPage() {
+export default function DemoLeadsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 

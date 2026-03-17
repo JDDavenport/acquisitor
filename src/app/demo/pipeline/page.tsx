@@ -130,7 +130,7 @@ function PipelineColumn({ stage, deals }: { stage: typeof stages[0]; deals: type
   );
 }
 
-export default function PipelinePage() {
+export default function DemoPipelinePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStage, setFilterStage] = useState("all");
 

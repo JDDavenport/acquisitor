@@ -5,30 +5,23 @@ import { toNextJsHandler } from "better-auth/next-js";
 const handlers = toNextJsHandler(auth);
 
 export async function GET(req: NextRequest) {
-  // Health check
   if (req.url.includes('/health')) {
-    let dbStatus = 'unknown';
-    let dbError = '';
-    let dbCode = '';
-    
     try {
-      const { db } = await import("@/lib/db");
-      const result = await db.query.user.findFirst();
-      dbStatus = 'connected';
+      const pg = await import("pg");
+      const pool = new pg.default.Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+        max: 1,
+        connectionTimeoutMillis: 5000,
+      });
+      const client = await pool.connect();
+      await client.query('SELECT 1');
+      client.release();
+      await pool.end();
+      return NextResponse.json({ status: 'ok', db: 'connected' });
     } catch (e: any) {
-      dbStatus = 'error';
-      dbError = e.message;
-      dbCode = e.code || 'no-code';
-      console.error("[Health] Full error:", e);
+      return NextResponse.json({ status: 'ok', db: 'error', error: e.message });
     }
-    
-    return NextResponse.json({ 
-      status: 'ok',
-      env: process.env.VERCEL_ENV,
-      dbConnection: dbStatus,
-      dbError,
-      dbCode
-    });
   }
   return handlers.GET(req);
 }
