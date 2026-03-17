@@ -58,9 +58,9 @@ export default function LeadsPage() {
 
   useEffect(() => {
     async function loadLeads() {
-      if (session?.user?.id) {
+      if (session?.data?.user?.id) {
         try {
-          const allLeads = await getLeads(session.user.id);
+          const allLeads = await getLeads(session.data.user.id);
           setLeads(allLeads);
         } catch (error) {
           console.error("Failed to load leads:", error);
@@ -71,7 +71,7 @@ export default function LeadsPage() {
     }
 
     loadLeads();
-  }, [session?.user?.id]);
+  }, [session?.data?.user?.id]);
 
   const filteredLeads = leads.filter((lead) => {
     const matchesSearch =
@@ -222,7 +222,7 @@ export default function LeadsPage() {
                     <TableCell className="text-navy-200">{lead.location || "N/A"}</TableCell>
                     <TableCell>
                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
+                        <DropdownMenuTrigger>
                           <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity text-navy-300 hover:text-white hover:bg-navy-700">
                             <MoreHorizontal className="w-4 h-4" />
                           </Button>

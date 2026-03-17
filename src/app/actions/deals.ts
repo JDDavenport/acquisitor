@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db';
 import { deals, leads } from '@/lib/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, or } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 
 export interface CreateDealInput {
@@ -30,12 +30,20 @@ export async function getDeals(
     search?: string;
   }
 ) {
-  let query = db.select().from(deals).where(eq(deals.userId, userId));
+  const conditions: any[] = [eq(deals.userId, userId)];
 
   if (filters?.stage) {
-    query = query.where(eq(deals.stage, filters.stage));
+    conditions.push(eq(deals.stage, filters.stage as any));
   }
 
+  const query = db.select().from(deals);
+  
+  if (conditions.length === 1) {
+    return await query.where(conditions[0]);
+  } else if (conditions.length > 1) {
+    return await query.where(and(...conditions));
+  }
+  
   return await query;
 }
 
@@ -94,7 +102,7 @@ export async function moveDealStage(id: string, newStage: string) {
   };
 
   await db.update(deals).set({
-    stage: newStage,
+    stage: newStage as any,
     probability: probabilityMap[newStage],
   }).where(eq(deals.id, id));
 

@@ -51,27 +51,27 @@ export async function getLeads(
     search?: string;
   }
 ) {
-  let query = db.select().from(leads).where(eq(leads.userId, userId));
+  const conditions: any[] = [eq(leads.userId, userId)];
 
   if (filters?.status) {
-    query = query.where(eq(leads.status, filters.status));
+    conditions.push(eq(leads.status, filters.status as any));
   }
 
   if (filters?.industry) {
-    query = query.where(eq(leads.industry, filters.industry));
+    conditions.push(eq(leads.industry, filters.industry));
   }
 
   if (filters?.scoreMin !== undefined) {
-    query = query.where(filters.scoreMin <= (leads.score as any));
+    conditions.push((leads.score as any) >= filters.scoreMin);
   }
 
   if (filters?.scoreMax !== undefined) {
-    query = query.where((leads.score as any) <= filters.scoreMax);
+    conditions.push((leads.score as any) <= filters.scoreMax);
   }
 
   if (filters?.search) {
     const searchTerm = `%${filters.search}%`;
-    query = query.where(
+    conditions.push(
       or(
         like(leads.title, searchTerm),
         like(leads.description, searchTerm),
@@ -81,6 +81,14 @@ export async function getLeads(
     );
   }
 
+  const query = db.select().from(leads);
+  
+  if (conditions.length === 1) {
+    return await query.where(conditions[0]);
+  } else if (conditions.length > 1) {
+    return await query.where(and(...conditions));
+  }
+  
   return await query;
 }
 

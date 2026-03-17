@@ -47,15 +47,15 @@ export default async function DashboardPage() {
   const totalLeads = allLeads.length;
   const emailsSent = allLeads.filter((l) => l.status !== "new").length;
   const dealsInPipeline = allDeals.length;
-  const pipelineValue = allDeals.reduce((sum, d) => sum + parseFloat(d.value), 0);
+  const pipelineValue = allDeals.reduce((sum, d) => sum + parseFloat(d.value || "0"), 0);
 
   // Get top leads by score
   const topLeads = [...allLeads]
-    .sort((a, b) => b.score - a.score)
+    .sort((a, b) => (b.score || 0) - (a.score || 0))
     .slice(0, 4)
     .map((lead) => ({
       name: lead.title,
-      score: lead.score,
+      score: lead.score || 0,
       industry: lead.industry || "Unknown",
       revenue: lead.revenue ? `$${parseFloat(lead.revenue).toLocaleString()}` : "N/A",
       status: lead.status,
