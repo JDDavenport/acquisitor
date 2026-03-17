@@ -200,14 +200,16 @@ export default function Home() {
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto border-navy-400 text-white hover:bg-navy-800/50 hover:text-white bg-transparent h-12"
-            >
-              <Play className="w-5 h-5 mr-2" />
-              Watch Demo
-            </Button>
+            <Link href="/demo">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto border-navy-400 text-white hover:bg-navy-800/50 hover:text-white bg-transparent h-12"
+              >
+                <Play className="w-5 h-5 mr-2" />
+                Watch Demo
+              </Button>
+            </Link>
           </motion.div>
 
           {/* Dashboard Preview */}
