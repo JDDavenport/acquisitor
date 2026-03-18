@@ -113,3 +113,27 @@ export const emailTemplates = pgTable("email_templates", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const documents = pgTable("documents", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  dealId: varchar("deal_id", { length: 255 }).references(() => deals.id).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  category: varchar("category", { length: 100 }), // financial, legal, operations, hr, other
+  fileUrl: text("file_url"),
+  fileSize: integer("file_size"),
+  mimeType: varchar("mime_type", { length: 100 }),
+  uploadedBy: varchar("uploaded_by", { length: 36 }).references(() => user.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const diligenceChecklist = pgTable("diligence_checklist", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  dealId: varchar("deal_id", { length: 255 }).references(() => deals.id).notNull(),
+  category: varchar("category", { length: 100 }).notNull(),
+  item: varchar("item", { length: 500 }).notNull(),
+  completed: boolean("completed").default(false),
+  notes: text("notes"),
+  assignedTo: varchar("assigned_to", { length: 36 }).references(() => user.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});

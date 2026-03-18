@@ -13,6 +13,9 @@ import {
   Building2,
   Bell,
   Search,
+  LineChart,
+  Mail,
+  Radar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -31,8 +34,11 @@ interface DashboardLayoutProps {
 
 const getNavItems = (basePath: string = "/dashboard") => [
   { name: "Overview", href: basePath, icon: LayoutDashboard },
+  { name: "Discover", href: `${basePath}/discover`, icon: Radar },
   { name: "Leads", href: `${basePath}/leads`, icon: Users },
   { name: "Pipeline", href: `${basePath}/pipeline`, icon: Kanban },
+  { name: "Intelligence", href: `${basePath}/intelligence`, icon: LineChart },
+  { name: "Templates", href: `${basePath}/templates`, icon: Mail },
   { name: "Settings", href: `${basePath}/settings`, icon: Settings },
 ];
 

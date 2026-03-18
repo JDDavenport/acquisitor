@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Plus,
   MoreHorizontal,
@@ -52,6 +53,8 @@ function getProbColor(p: number) {
 }
 
 function DealCard({ deal, stage }: { deal: any; stage: typeof stages[0] }) {
+  const router = useRouter();
+
   const handleStageChange = async (newStage: string) => {
     try {
       await moveDealStage(deal.id, newStage);
@@ -62,19 +65,27 @@ function DealCard({ deal, stage }: { deal: any; stage: typeof stages[0] }) {
     }
   };
 
+  const handleViewDetails = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    router.push(`/dashboard/deals/${deal.id}`);
+  };
+
   return (
-    <Card className="border-navy-700/50 bg-navy-800/50 backdrop-blur-sm cursor-grab hover:bg-navy-700/50 hover:border-navy-600/50 transition-all duration-200 group">
+    <Card 
+      className="border-navy-700/50 bg-navy-800/50 backdrop-blur-sm cursor-grab hover:bg-navy-700/50 hover:border-navy-600/50 transition-all duration-200 group"
+      onClick={handleViewDetails}
+    >
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-3">
           <div className={cn("w-1.5 h-8 rounded-full", stage.color)} />
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger onClick={(e) => e.stopPropagation()}>
               <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-navy-400 hover:text-white hover:bg-navy-700">
                 <MoreHorizontal className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40 bg-navy-800 border-navy-700">
-              <DropdownMenuItem className="text-navy-100 focus:bg-navy-700">View Details</DropdownMenuItem>
+            <DropdownMenuContent align="end" className="w-40 bg-navy-800 border-navy-700" onClick={(e) => e.stopPropagation()}>
+              <DropdownMenuItem className="text-navy-100 focus:bg-navy-700" onClick={handleViewDetails}>View Details</DropdownMenuItem>
               <DropdownMenuItem className="text-navy-100 focus:bg-navy-700">Edit Deal</DropdownMenuItem>
               <DropdownMenuSeparator className="bg-navy-700" />
               {stages.map((s) => (

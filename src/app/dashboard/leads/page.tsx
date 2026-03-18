@@ -15,6 +15,7 @@ import {
   Trash2,
   Edit,
   Eye,
+  Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,9 +30,10 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSession } from "@/lib/auth-client";
-import { getLeads, deleteLead } from "@/app/actions/leads";
+import { getLeads, deleteLead, importLeadsCSV } from "@/app/actions/leads";
+import { useToast } from "@/hooks/use-toast";
 
 const statusConfig: Record<string, { label: string; className: string }> = {
   new: { label: "New", className: "bg-blue-500/10 text-blue-400 border-blue-500/20" },
@@ -51,10 +53,13 @@ function getScoreStyle(score: number) {
 
 export default function LeadsPage() {
   const session = useSession();
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isImporting, setIsImporting] = useState(false);
 
   useEffect(() => {
     async function loadLeads() {
@@ -93,6 +98,36 @@ export default function LeadsPage() {
     }
   };
 
+  const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.csv')) {
+      toast("Error", { description: "Please upload a CSV file", variant: "destructive" });
+      return;
+    }
+
+    setIsImporting(true);
+    try {
+      const text = await file.text();
+      const result = await importLeadsCSV(session?.data?.user?.id || "", text);
+      
+      // Reload leads
+      const updatedLeads = await getLeads(session?.data?.user?.id || "");
+      setLeads(updatedLeads);
+
+      toast("Success", { description: `Imported ${result.count} lead${result.count !== 1 ? 's' : ''} successfully` });
+    } catch (error) {
+      console.error("Failed to import CSV:", error);
+      toast("Error", { description: error instanceof Error ? error.message : "Failed to import CSV", variant: "destructive" });
+    } finally {
+      setIsImporting(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   const stats = [
     { label: "Total Leads", value: leads.length, color: "text-white" },
     { label: "Qualified", value: leads.filter((l) => l.status !== "new" && l.status !== "archived").length, color: "text-emerald-400" },
@@ -102,13 +137,31 @@ export default function LeadsPage() {
 
   return (
     <div className="space-y-6 animate-slide-up">
+      {/* Hidden file input for CSV import */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleCSVImport}
+        accept=".csv"
+        style={{ display: "none" }}
+      />
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white">Leads</h1>
           <p className="text-navy-300 mt-1">Manage and track your acquisition prospects</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button 
+            variant="outline" 
+            className="border-navy-700 text-navy-200 hover:bg-navy-700 hover:text-white bg-transparent"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isImporting}
+          >
+            <Upload className="w-4 h-4 mr-2" />
+            {isImporting ? "Importing..." : "Import CSV"}
+          </Button>
           <Button variant="outline" className="border-navy-700 text-navy-200 hover:bg-navy-700 hover:text-white bg-transparent">
             <Download className="w-4 h-4 mr-2" />
             Export
