@@ -11,7 +11,6 @@ import {
   Menu,
   LogOut,
   Building2,
-  Bell,
   Search,
   LineChart,
   Mail,
@@ -23,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { NotificationBell } from "@/components/notification-bell";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -145,10 +145,7 @@ export default function DashboardLayoutClient({ children, user, basePath = "/das
           </div>
 
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="text-navy-300 hover:text-white hover:bg-navy-800 relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-gold-500 rounded-full" />
-            </Button>
+            <NotificationBell />
             <div className="flex items-center gap-3 pl-3 border-l border-navy-800/50">
               <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gold-500 to-gold-400 flex items-center justify-center text-navy-950 font-semibold text-sm">
                 {initials}
