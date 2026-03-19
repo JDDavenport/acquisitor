@@ -1,0 +1,41 @@
+#!/bin/bash
+# Commit message hook - Enforce message standards
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# 1. Check minimum length (10 characters)
+if [ ${#COMMIT_MSG} -lt 10 ]; then
+  echo "❌ Commit message too short (minimum 10 characters)"
+  exit 1
+fi
+
+# 2. Reject banned messages (exact matches, case insensitive)
+BANNED_PATTERNS=(
+  "^Auto-save$"
+  "^sync$"
+  "^update$"
+  "^fix$"
+  "^changes$"
+  "^WIP$"
+)
+
+for pattern in "${BANNED_PATTERNS[@]}"; do
+  if echo "$COMMIT_MSG" | grep -iq "$pattern"; then
+    echo "❌ Rejected: '$COMMIT_MSG' matches banned message pattern"
+    echo "   Use descriptive messages instead of: Auto-save, sync, update, fix, changes, WIP"
+    exit 1
+  fi
+done
+
+# 3. Recommend conventional commits format
+if ! echo "$COMMIT_MSG" | grep -iqE "^(feat|fix|refactor|docs|chore|test|perf|style)[\!:]?(\(.+\))?:"; then
+  echo "⚠️  Tip: Consider using conventional commits format:"
+  echo "   feat: Add new feature"
+  echo "   fix: Fix a bug"
+  echo "   refactor: Refactor code"
+  echo "   docs: Update documentation"
+  echo "   chore: Maintenance tasks"
+fi
+
+exit 0

@@ -16,6 +16,7 @@ import {
   LineChart,
   Mail,
   Radar,
+  Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,7 @@ const getNavItems = (basePath: string = "/dashboard") => [
   { name: "Pipeline", href: `${basePath}/pipeline`, icon: Kanban },
   { name: "Intelligence", href: `${basePath}/intelligence`, icon: LineChart },
   { name: "Templates", href: `${basePath}/templates`, icon: Mail },
+  { name: "Automation", href: `${basePath}/automation`, icon: Zap },
   { name: "Settings", href: `${basePath}/settings`, icon: Settings },
 ];
 

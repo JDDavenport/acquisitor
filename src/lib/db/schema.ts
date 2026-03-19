@@ -114,6 +114,42 @@ export const emailTemplates = pgTable("email_templates", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const automationStatusEnum = pgEnum('automation_status', ['success', 'error', 'running']);
+
+export const automationLogs = pgTable("automation_logs", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  type: varchar("type", { length: 50 }).notNull(), // discover, outreach, check-replies
+  status: automationStatusEnum("status").default('running').notNull(),
+  message: text("message"),
+  itemsProcessed: integer("items_processed").default(0),
+  userId: varchar("user_id", { length: 36 }).references(() => user.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const automationSettings = pgTable("automation_settings", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  userId: varchar("user_id", { length: 36 }).references(() => user.id).notNull(),
+  type: varchar("type", { length: 50 }).notNull(), // discover, outreach, check-replies
+  enabled: boolean("enabled").default(false).notNull(),
+  lastRunAt: timestamp("last_run_at"),
+  nextRunAt: timestamp("next_run_at"),
+  config: text("config"), // JSON config
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const replyQueue = pgTable("reply_queue", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  leadId: varchar("lead_id", { length: 255 }).references(() => leads.id),
+  originalSubject: varchar("original_subject", { length: 500 }),
+  replyBody: text("reply_body"),
+  draftResponse: text("draft_response"),
+  status: varchar("status", { length: 50 }).default('pending').notNull(), // pending, approved, sent, dismissed
+  userId: varchar("user_id", { length: 36 }).references(() => user.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const documents = pgTable("documents", {
   id: varchar("id", { length: 255 }).primaryKey(),
   dealId: varchar("deal_id", { length: 255 }).references(() => deals.id).notNull(),

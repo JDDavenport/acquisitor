@@ -318,8 +318,29 @@ export default function TemplatesClient({ initialTemplates, userId }: { initialT
                 onChange={(e) => setFormData({ ...formData, body: e.target.value })}
               />
               <p className="text-xs text-navy-400 mt-2">
-                💡 Tip: Use {"{name}"}, {"{company}"}, {"{revenue}"} for dynamic variables
+                💡 Tip: Use {"{name}"}, {"{company}"}, {"{revenue}"}, {"{deal_value}"} for dynamic variables
               </p>
+
+              {/* Preview */}
+              {formData.body && (
+                <div className="mt-4 p-4 rounded-lg bg-navy-900/50 border border-navy-700/30">
+                  <p className="text-xs font-semibold text-navy-400 mb-2 uppercase tracking-wider">Preview</p>
+                  <p className="text-sm text-gold-400 mb-1 font-medium">
+                    {formData.subject
+                      .replace(/\{\{name\}\}/g, 'John Smith')
+                      .replace(/\{\{company\}\}/g, 'Acme Corp')
+                      .replace(/\{\{revenue\}\}/g, '$500,000')
+                      .replace(/\{\{deal_value\}\}/g, '$750,000')}
+                  </p>
+                  <p className="text-sm text-navy-200 whitespace-pre-wrap">
+                    {formData.body
+                      .replace(/\{\{name\}\}/g, 'John Smith')
+                      .replace(/\{\{company\}\}/g, 'Acme Corp')
+                      .replace(/\{\{revenue\}\}/g, '$500,000')
+                      .replace(/\{\{deal_value\}\}/g, '$750,000')}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
