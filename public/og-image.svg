@@ -1,0 +1,73 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1f3a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="150" fill="#3b82f6" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="200" fill="#fbbf24" opacity="0.1"/>
+  
+  <!-- Logo area -->
+  <g>
+    <rect x="50" y="50" width="80" height="80" rx="12" fill="url(#goldGradient)"/>
+    <text x="90" y="105" font-size="48" font-weight="bold" text-anchor="middle" fill="#0f172a" font-family="Arial, sans-serif">📊</text>
+  </g>
+  
+  <!-- Main heading -->
+  <text x="600" y="180" font-size="64" font-weight="bold" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif">
+    ACQUISITOR
+  </text>
+  
+  <!-- Subheading -->
+  <text x="600" y="240" font-size="32" text-anchor="middle" fill="#e0e7ff" font-family="Arial, sans-serif">
+    AI-Powered Business Acquisition
+  </text>
+  
+  <!-- Description -->
+  <text x="600" y="310" font-size="24" text-anchor="middle" fill="#a5b4fc" font-family="Arial, sans-serif">
+    Source • Score • Close
+  </text>
+  
+  <!-- Features row 1 -->
+  <g>
+    <circle cx="250" cy="420" r="6" fill="#fbbf24"/>
+    <text x="270" y="430" font-size="18" fill="#e0e7ff" font-family="Arial, sans-serif">AI Lead Discovery</text>
+  </g>
+  
+  <g>
+    <circle cx="700" cy="420" r="6" fill="#fbbf24"/>
+    <text x="720" y="430" font-size="18" fill="#e0e7ff" font-family="Arial, sans-serif">Smart Scoring</text>
+  </g>
+  
+  <!-- Features row 2 -->
+  <g>
+    <circle cx="250" cy="480" r="6" fill="#fbbf24"/>
+    <text x="270" y="490" font-size="18" fill="#e0e7ff" font-family="Arial, sans-serif">Deal Pipeline Management</text>
+  </g>
+  
+  <g>
+    <circle cx="700" cy="480" r="6" fill="#fbbf24"/>
+    <text x="720" y="490" font-size="18" fill="#e0e7ff" font-family="Arial, sans-serif">Due Diligence Tools</text>
+  </g>
+  
+  <!-- CTA text -->
+  <text x="600" y="560" font-size="20" text-anchor="middle" fill="#fbbf24" font-weight="bold" font-family="Arial, sans-serif">
+    Join 200+ Business Buyers
+  </text>
+  
+  <!-- Footer URL -->
+  <text x="600" y="605" font-size="16" text-anchor="middle" fill="#6b7280" font-family="Arial, sans-serif">
+    acquisitor-v3.vercel.app
+  </text>
+</svg>

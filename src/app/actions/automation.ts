@@ -210,8 +210,8 @@ export async function runCheckRepliesAutomation(userId: string) {
     const execAsync = promisify(exec);
 
     // Get Gmail credentials from environment
-    const gogEmail = process.env.GOG_EMAIL || 'jddavenport46@gmail.com';
-    const gogPassword = process.env.GOG_KEYRING_PASSWORD || 'password123';
+    const gogEmail = process.env.GOG_EMAIL || '';
+    const gogKeyringPassword = process.env.GOG_KEYRING_PASSWORD || '';
     const openaiKey = process.env.OPENAI_API_KEY;
 
     if (!openaiKey) {
@@ -222,7 +222,7 @@ export async function runCheckRepliesAutomation(userId: string) {
     let emailOutput = '';
     try {
       const { stdout } = await execAsync(
-        `GOG_KEYRING_PASSWORD="${gogPassword}" gog --account "${gogEmail}" gmail messages search "is:unread subject:re" --limit 20`,
+        `GOG_KEYRING_PASSWORD="${gogKeyringPassword}" gog --account "${gogEmail}" gmail messages search "is:unread subject:re" --limit 20`,
         { maxBuffer: 1024 * 1024 * 10 }
       );
       emailOutput = stdout;
@@ -314,7 +314,7 @@ export async function runCheckRepliesAutomation(userId: string) {
         let emailContent = '';
         try {
           const { stdout: msgStdout } = await execAsync(
-            `GOG_KEYRING_PASSWORD="${gogPassword}" gog --account "${gogEmail}" gmail messages show --limit 1 "from:${senderEmail} is:unread subject:re"`,
+            `GOG_KEYRING_PASSWORD="${gogKeyringPassword}" gog --account "${gogEmail}" gmail messages show --limit 1 "from:${senderEmail} is:unread subject:re"`,
             { maxBuffer: 1024 * 1024 * 10 }
           );
           emailContent = msgStdout;
